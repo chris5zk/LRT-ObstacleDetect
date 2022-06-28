@@ -19,13 +19,6 @@ def increment_path(path, exist_ok=False, sep='', mkdir=False):
                 break
         path = Path(p)
 
-        # Method 2 (deprecated)
-        # dirs = glob.glob(f"{path}{sep}*")  # similar paths
-        # matches = [re.search(rf"{path.stem}{sep}(\d+)", d) for d in dirs]
-        # i = [int(m.groups()[0]) for m in matches if m]  # indices
-        # n = max(i) + 1 if i else 2  # increment number
-        # path = Path(f"{path}{sep}{n}{suffix}")  # increment path
-
     if mkdir:
         path.mkdir(parents=True, exist_ok=True)  # make directory
 
@@ -51,3 +44,29 @@ def make_output_dir(output_base_path):
     os.makedirs(output_path)
     
     return obs_mask_path,seg_mask_path,output_path
+
+def get_bounding_box(imgs, results):
+    masks = []
+    pre = results.pandas().xyxy
+    for index,p in enumerate(pre):
+        mask = np.zeros(imgs[index].shape,np.uint8)
+        for i in range(len(p)):
+            xmin = int(p.iloc[i]['xmin'])
+            xmax = int(p.iloc[i]['xmax'])
+            ymin = int(p.iloc[i]['ymin'])
+            ymax = int(p.iloc[i]['ymax'])
+            mask[ymin:ymax,xmin:xmax] = 255;
+        masks.append(mask)
+    return masks
+
+def get_segmentation(path):
+    masks = []
+    segs = os.listdir(path)
+    for index,seg in enumerate(segs):
+        rail = cv2.imread(f"{path}/{seg}")
+        mask_B = rail[:,:,0] == 33
+        mask_G = rail[:,:,1] == 150
+        mask_R = rail[:,:,2] == 243
+        mask = mask_B.astype(np.uint8) * mask_G.astype(np.uint8) * mask_R.astype(np.uint8)
+        masks.append(mask*255)
+    return masks

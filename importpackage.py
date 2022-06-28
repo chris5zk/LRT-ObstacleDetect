@@ -9,4 +9,9 @@ import os
 import cv2
 import torch
 import numpy as np
+import torchvision
+from torchvision import datasets, transforms
 from pathlib import Path
+
+# This is for the progress bar.
+from tqdm import tqdm
