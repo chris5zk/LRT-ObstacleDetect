@@ -31,9 +31,9 @@ test_dataset_path = f"{dataset_base_path}/test"
 
 test_images_path = f"{test_dataset_path}/images"
 images_org_path = f"{test_images_path}/original"
-images_org_data = f"{images_org_path}/rail"
 images_seg_path = f"{test_images_path}/seg"
-images_org_data = f"{images_seg_path}/rail"
+images_org_data = f"{images_org_path}/rail"
+images_seg_data = f"{images_seg_path}/rail"
 
 test_videos_path = f"{test_dataset_path}/videos"
 videos_org_path = f"{test_videos_path}/original"

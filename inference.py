@@ -14,9 +14,10 @@ from functions import *
 
 
 # yolov5
-# Load Model
 
+# Load Model
 device = torch.device('cpu')
+print("-------------------------  Loading Model...  -------------------------")
 model = torch.hub.load('ultralytics/yolov5','custom', pt, force_reload=True)
 model.to(device)
 
@@ -27,24 +28,32 @@ print("------------------------- ↑ yolov5 ↑ -------------------------", flus
 # Load Data
 # Images
 if target == 'images':
-    images_datasets = datasets.ImageFolder(images_org_path, transform=test_transforms)
-    images_dataloaders = torch.utils.data.DataLoader(images_datasets, batch_size=batch_size, shuffle=False)
-
+    images_org_datasets = datasets.ImageFolder(images_org_path, transform=test_transforms)
+    images_org_dataloaders = torch.utils.data.DataLoader(images_org_datasets, batch_size=batch_size, shuffle=False)
+    images_seg_datasets = datasets.ImageFolder(images_seg_path, transform=test_transforms)
+    images_seg_dataloaders = torch.utils.data.DataLoader(images_seg_datasets, batch_size=batch_size, shuffle=False)
 # Videos
 if target == 'vidoes':
     pass
 
-# Output
-obs_mask_path,seg_mask_path,output_path = make_output_dir(output_base_path)
-
 # Inference
 model.eval()
+imgs = []
+segs = []
 if target == 'images':
-    imgs = []
-    for batch in tqdm(images_dataloaders):
+    # original
+    print("-------------------------  Loading original images  -------------------------")
+    for batch in tqdm(images_org_dataloaders):
         img, label = batch
-        for i in range(batch_size):
+        for i in range(len(img)):
             imgs.append(img[i].numpy()*255)
+    # segmentation
+    print("-------------------------  Loading segmentation images  -------------------------")
+    for batch in tqdm(images_seg_dataloaders):
+        seg, label = batch
+        for i in range(len(seg)):
+            segs.append(seg[i].numpy()*255)
+    print("-------------------------  Start Inference  -------------------------")
     results = model(imgs)
     
 if target == 'videos':
@@ -53,15 +62,22 @@ if target == 'videos':
 # Results
 results.print()
 results.save()
-
-# BBOX masks
-bbox_masks = get_bounding_box(imgs, results)
-
-# Rail masks
-seg_masks = get_segmentation(images_seg_path)
+print("-------------------------  Finish Inference  -------------------------")
 
 # Obstacle detect
+print("-------------------------  Obstacle Detecting...  -------------------------")
+# BBOX masks
+bbox_masks = get_bounding_box(imgs, results)
+# Rail masks
+seg_masks = get_segmentation(images_seg_data, segs)
+# Interaction
+rail_masks, alerm_masks = obstacle_detect(bbox_masks, seg_masks)
+outputs = color_and_output(imgs, rail_masks, alerm_masks, results)
 
+# Output
+print("-------------------------  Saving Obstacle Detection Results  -------------------------")
+output_path = make_output_dir(output_base_path)
+store(outputs, output_path)
 
 #if __name__ == '__main__':
 #    main()
