@@ -1,11 +1,10 @@
 # LRT-ObstacleDetect    
 ## Folder path
-```
-整合方向：               
+```               
 LRT-ObstacleDetect
-│.git
-│__pycache__
-│README.md
+│ .git
+│ __pycache__
+│ README.md
 ├───dataset
 │	├───test
 │	│	├───images
@@ -28,9 +27,9 @@ LRT-ObstacleDetect
 │	├───weights
 │	│	└───rail_2.pt│
 │	└─
-│importpackage.py
-│hyperparameter.py
-│functions.py
-│datasets.py
-│object_4.pt
+│ importpackage.py
+│ hyperparameter.py
+│ functions.py
+│ datasets.py
+│ object_4.pt
 ```
