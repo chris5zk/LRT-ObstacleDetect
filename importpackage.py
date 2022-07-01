@@ -7,7 +7,9 @@ Created on Thu Jun 23 11:43:43 2022
 
 import os
 import cv2
+import time
 import torch
+import urllib
 import numpy as np
 import torchvision
 from torchvision import datasets, transforms

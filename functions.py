@@ -54,7 +54,7 @@ def get_bounding_box(imgs, results):
         masks.append(mask)
     return masks
 
-def get_segmentation(paths,segs):
+def get_segmentation(segs):
     masks = []
     for seg in segs:
         rail = np.zeros(seg.shape,np.uint8)

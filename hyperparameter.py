@@ -7,40 +7,38 @@ Created on Thu Jun 23 11:46:12 2022
 
 from importpackage import *
 
-# Inference
-
-# yolact-edge
-
-
-
-
-
-
-# yolov5
-# pt file
-pt = 'object_4.pt'
-# Input path:should be modified when merge with yolact
+########## Datasets ##########
 dataset_base_path = './dataset'
+target = 'images'     # images/videos
 
-# train
+### train ###
 train_dataset_path = f"{dataset_base_path}/train"
 
-# test
-target = 'images'
+### test ###
 test_dataset_path = f"{dataset_base_path}/test"
+test_path = f"{test_dataset_path}/{target}"
 
-test_images_path = f"{test_dataset_path}/images"
-images_org_path = f"{test_images_path}/original"
-images_seg_path = f"{test_images_path}/seg"
-images_org_data = f"{images_org_path}/rail"
-images_seg_data = f"{images_seg_path}/rail"
+# original dataset
+test_org_path = f"{test_path}/original"
 
-test_videos_path = f"{test_dataset_path}/videos"
-videos_org_path = f"{test_videos_path}/original"
-videos_seg_path = f"{test_videos_path}/seg"
+# segmentation dataset
+test_seg_path = f"{test_path}/seg"          # should be modified when merge with yolact
 
-# Output path
-output_base_path = 'runs/output'
 
-# Data
+########## Models ##########
+### yolact-edge ###
+# weights
+yolact_edge_pt = './yolact_edge/weights/rail_2.pt'
+
+# parse_args
+
+
+### yolov5 ###
+# weights
+yolov5_pt = 'object_4.pt'
+
+# data
 batch_size = 4
+
+########## Output ##########
+output_base_path = 'runs/output'
