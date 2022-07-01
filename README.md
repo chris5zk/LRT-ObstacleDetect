@@ -1,59 +1,59 @@
-# LRT-ObstacleDetect    <br>
+# LRT-ObstacleDetect    
 ## Folder path
 ```
-整合方向：               <br>
-LRT-ObstacleDetect      <br>
-│	.git                  <br>
-│	__pycache__           <br>
-│	README.md             <br>
-│                       <br>
-├───dataset             <br>
-│	│                     <br>
-│	├───test              <br>
-│	│	│                   <br>
-│	│	├───images          <br>
-│	│	│	│                 <br>
-│	│	│	├───original      <br>
-│	│	│	│	│               <br>
-│	│	│	│	└─	rail        <br>
-│	│	│	│                 <br>
-│	│	│	└───seg           <br>
-│	│	│		│               <br>
-│	│	│		└─	rail        <br>
-│	│	│                   <br>
-│	│	└───videos          <br>
-│	│                     <br>
-│	└───train             <br>
-│		│                   <br>
-│		├───images          <br>
-│		│                   <br>
-│		└───videos          <br>
-│                       <br>
-├───runs                <br>
-│	│                     <br>
-│	├───detect            <br>
-│	│                     <br>
-│	└───output            <br>
-│                       <br>
-├───yolov5              <br>
-│	│                     <br>
-│	├───weights           <br>
-│	│	│                   <br>
-│	│	└───(yolov5.pt)     <br>
-│	│                     <br>
-│	└─                    <br>
-│                       <br>
-├───yolact_edge         <br>
-│	│                     <br>
-│	├───weights           <br>
-│	│	│                   <br>
-│	│	└───rail_2.pt       <br>
-│	│                     <br>
-│	└─                    <br>
-│                       <br>
-│	importpackage.py      <br>
-│	hyperparameter.py     <br>
-│	functions.py          <br>
-│	datasets.py           <br>
-│	object_4.pt           <br>
+整合方向：               
+LRT-ObstacleDetect
+│	.git
+│	__pycache__
+│	README.md
+│
+├───dataset
+│	│
+│	├───test
+│	│	│
+│	│	├───images
+│	│	│	│
+│	│	│	├───original
+│	│	│	│	│
+│	│	│	│	└─	rail
+│	│	│	│
+│	│	│	└───seg
+│	│	│		│
+│	│	│		└─	rail
+│	│	│
+│	│	└───videos
+│	│
+│	└───train
+│		│
+│		├───images
+│		│
+│		└───videos
+│
+├───runs
+│	│
+│	├───detect
+│	│
+│	└───output
+│
+├───yolov5
+│	│
+│	├───weights
+│	│	│
+│	│	└───(yolov5.pt)
+│	│
+│	└─
+│
+├───yolact_edge
+│	│
+│	├───weights
+│	│	│
+│	│	└───rail_2.pt
+│	│
+│	└─
+│
+│	importpackage.py
+│	hyperparameter.py
+│	functions.py
+│	datasets.py
+│	object_4.pt
 ```
