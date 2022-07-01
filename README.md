@@ -3,9 +3,9 @@
 ```
 整合方向：               
 LRT-ObstacleDetect
-│	.git
-│	__pycache__
-│	README.md
+│.git
+│__pycache__
+│README.md
 │
 ├───dataset
 │	│
@@ -15,11 +15,11 @@ LRT-ObstacleDetect
 │	│	│	│
 │	│	│	├───original
 │	│	│	│	│
-│	│	│	│	└─	rail
+│	│	│	│	└─rail
 │	│	│	│
 │	│	│	└───seg
 │	│	│		│
-│	│	│		└─	rail
+│	│	│		└─rail
 │	│	│
 │	│	└───videos
 │	│
@@ -51,9 +51,9 @@ LRT-ObstacleDetect
 │	│
 │	└─
 │
-│	importpackage.py
-│	hyperparameter.py
-│	functions.py
-│	datasets.py
-│	object_4.pt
+│importpackage.py
+│hyperparameter.py
+│functions.py
+│datasets.py
+│object_4.pt
 ```
