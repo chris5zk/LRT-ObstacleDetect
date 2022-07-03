@@ -1,7 +1,7 @@
 import re, sys, os
 import matplotlib.pyplot as plt
 
-from yolact_edge.utils.functions import MovingAverage
+from my_yolact.yolact_edge.utils.functions import MovingAverage
 
 with open(sys.argv[1], 'r') as f:
 	inp = f.read()

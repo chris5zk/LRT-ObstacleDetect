@@ -3,13 +3,13 @@ import torch
 import torch.backends.cudnn as cudnn
 import matplotlib.pyplot as plt
 from collections import defaultdict
-from yolact_edge.data.config import cfg, set_cfg
-from yolact_edge.yolact import Yolact
-from yolact_edge.utils.augmentations import FastBaseTransform, BaseTransform
-from yolact_edge.utils import timer
-from yolact_edge.layers.output_utils import postprocess, undo_image_transformation
-from yolact_edge.data import COLORS, set_dataset
-from yolact_edge.utils.tensorrt import convert_to_tensorrt
+from my_yolact.yolact_edge.data.config import cfg, set_cfg
+from my_yolact.yolact_edge.yolact import Yolact
+from my_yolact.yolact_edge.utils.augmentations import FastBaseTransform, BaseTransform
+from my_yolact.yolact_edge.utils import timer
+from my_yolact.yolact_edge.layers.output_utils import postprocess, undo_image_transformation
+from my_yolact.yolact_edge.data import COLORS, set_dataset
+from my_yolact.yolact_edge.utils.tensorrt import convert_to_tensorrt
 import argparse
 import random
 
