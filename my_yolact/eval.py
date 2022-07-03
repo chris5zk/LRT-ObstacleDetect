@@ -1265,7 +1265,7 @@ def my_yolact_edge(parse_arguments):
     if args.dataset is not None:
         set_dataset(args.dataset)
 
-    from yolact_edge.utils.logging_helper import setup_logger
+    from my_yolact.yolact_edge.utils.logging_helper import setup_logger
     setup_logger(logging_level=logging.INFO)
     logger = logging.getLogger("yolact.eval")
 

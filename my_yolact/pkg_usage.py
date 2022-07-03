@@ -2,7 +2,7 @@ import numpy as np
 import urllib
 import time
 import cv2
-from yolact_edge.inference import YOLACTEdgeInference
+from my_yolact.yolact_edge.inference import YOLACTEdgeInference
 
 weights = "yolact_edge_resnet50_54_800000.pth"
 # All available model configs, depends on which weights
