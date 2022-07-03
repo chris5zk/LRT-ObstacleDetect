@@ -12,7 +12,7 @@ from functions import *
 from my_yolact.eval import *
 
 if __name__ == '__main__':
-    """
+
 ########## Load Original Data ##########
     # Images
     imgs = []
@@ -38,14 +38,14 @@ if __name__ == '__main__':
     # Videos
     if target == 'vidoes':
         pass
-    """   
+
     ########## yolact-edged ##########
     print("-------------------------  YOLACT_EDGE  -------------------------")
     print("-------------------------  Start Inference  -------------------------")
     my_yolact_edge(parse_arguments)
     print("-------------------------  Finish Inference  -------------------------")
     
-    """
+
     ########## yolov5 ##########
     ## Load Model
     device = torch.device('cpu')
@@ -83,6 +83,6 @@ if __name__ == '__main__':
     output_path = make_output_dir(output_base_path)
     store(outputs, output_path)
     print("-------------------------  Finish -------------------------")
-    """
+
     
     #    main()

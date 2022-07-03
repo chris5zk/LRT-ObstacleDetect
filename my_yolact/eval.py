@@ -237,7 +237,7 @@ def prep_display(dets_out, img, h, w, undo_transform=True, class_color=True, mas
             color = COLORS[color_idx]
             if not undo_transform:
                 # The image might come in as RGB or BRG, depending
-                color = (color[0], color[1], color[2])
+                color = (color[0], color[1], color[0])
             if on_gpu is not None:
                 color = torch.Tensor(color).to(on_gpu).float() / 255.
                 color_cache[on_gpu][color_idx] = color
