@@ -42,101 +42,139 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
-def parse_args(argv=None):
+def parse_args(parse_arguments, argv=None):
     parser = argparse.ArgumentParser(
         description='YOLACT COCO Evaluation')
     parser.add_argument('--trained_model', #--dataset=my_custom_dataset
-                        default='/home/chris/workspace/yolact_edge/weights/yolact_edge_29_10000.pth', type=str,
+                        default=parse_arguments.trained_model , type=str,
                         help='Trained state_dict file path to open. If "interrupt", this will open the interrupt file.')
-    parser.add_argument('--top_k', default=1, type=int,
+    parser.add_argument('--top_k',
+                        default=parse_arguments.top_k, type=int,
                         help='Further restrict the number of predictions to parse')
-    parser.add_argument('--cuda', default=True, type=str2bool,
+    parser.add_argument('--cuda',
+                        default=parse_arguments.cuda, type=str2bool,
                         help='Use cuda to evaulate model')
-    parser.add_argument('--fast_nms', default=True, type=str2bool,
+    parser.add_argument('--fast_nms',
+                        default=parse_arguments.fast_nms, type=str2bool,
                         help='Whether to use a faster, but not entirely correct version of NMS.')
-    parser.add_argument('--display_masks', default=True, type=str2bool,
+    parser.add_argument('--display_masks',
+                        default=parse_arguments.display_masks, type=str2bool,
                         help='Whether or not to display masks over bounding boxes')
-    parser.add_argument('--display_bboxes', default=False, type=str2bool,
+    parser.add_argument('--display_bboxes',
+                        default=parse_arguments.display_bboxes, type=str2bool,
                         help='Whether or not to display bboxes around masks')
-    parser.add_argument('--display_text', default=False, type=str2bool,
+    parser.add_argument('--display_text',
+                        default=parse_arguments.display_text, type=str2bool,
                         help='Whether or not to display text (class [score])')
-    parser.add_argument('--display_scores', default=True, type=str2bool,
+    parser.add_argument('--display_scores',
+                        default=parse_arguments.display_scores, type=str2bool,
                         help='Whether or not to display scores in addition to classes')
     parser.add_argument('--display', dest='display', action='store_true',
                         help='Display qualitative results instead of quantitative ones.')
     parser.add_argument('--shuffle', dest='shuffle', action='store_true',
                         help='Shuffles the images when displaying them. Doesn\'t have much of an effect when display is off though.')
-    parser.add_argument('--ap_data_file', default='results/ap_data.pkl', type=str,
+    parser.add_argument('--ap_data_file',
+                        default=parse_arguments.ap_data_file, type=str,
                         help='In quantitative mode, the file to save detections before calculating mAP.')
     parser.add_argument('--resume', dest='resume', action='store_true',
                         help='If display not set, this resumes mAP calculations from the ap_data_file.')
-    parser.add_argument('--max_images', default=-1, type=int,
+    parser.add_argument('--max_images',
+                        default=parse_arguments.max_images, type=int,
                         help='The maximum number of images from the dataset to consider. Use -1 for all.')
-    parser.add_argument('--eval_stride', default=5, type=int,
+    parser.add_argument('--eval_stride',
+                        default=parse_arguments.eval_stride, type=int,
                         help='The default frame eval stride.')
     parser.add_argument('--output_coco_json', dest='output_coco_json', action='store_true',
                         help='If display is not set, instead of processing IoU values, this just dumps detections into the coco json file.')
-    parser.add_argument('--bbox_det_file', default='results/bbox_detections.json', type=str,#/home/chris/workspace/yolact_edge/
+    parser.add_argument('--bbox_det_file',
+                        default=parse_arguments.bbox_det_file, type=str,#/home/chris/workspace/yolact_edge/
                         help='The output file for coco bbox results if --coco_results is set.')
-    parser.add_argument('--mask_det_file', default='results/mask_detections.json', type=str,
+    parser.add_argument('--mask_det_file',
+                        default=parse_arguments.mask_det_file, type=str,
                         help='The output file for coco mask results if --coco_results is set.')
-    parser.add_argument('--config', default=None,
+    parser.add_argument('--config',
+                        default=parse_arguments.config,
                         help='The config object to use.')
     parser.add_argument('--output_web_json', dest='output_web_json', action='store_true',
                         help='If display is not set, instead of processing IoU values, this dumps detections for usage with the detections viewer web thingy.')
-    parser.add_argument('--web_det_path', default='web/dets/', type=str,
+    parser.add_argument('--web_det_path',
+                        default=parse_arguments.web_det_path, type=str,
                         help='If output_web_json is set, this is the path to dump detections into.')
     parser.add_argument('--no_bar', dest='no_bar', action='store_true',
                         help='Do not output the status bar. This is useful for when piping to a file.')
-    parser.add_argument('--display_lincomb', default=False, type=str2bool,
+    parser.add_argument('--display_lincomb',
+                        default=parse_arguments.display_lincomb, type=str2bool,
                         help='If the config uses lincomb masks, output a visualization of how those masks are created.')
-    parser.add_argument('--benchmark', default=False, dest='benchmark', action='store_true',
+    parser.add_argument('--benchmark',
+                        default=parse_arguments.benchmark, dest='benchmark', action='store_true',
                         help='Equivalent to running display mode but without displaying an image.')
-    parser.add_argument('--fast_eval', default=False, dest='fast_eval', action='store_true',
+    parser.add_argument('--fast_eval',
+                        default=parse_arguments.fast_eval, dest='fast_eval', action='store_true',
                         help='Skip those warping frames when there is no GT annotations.')
-    parser.add_argument('--deterministic', default=False, dest='deterministic', action='store_true',
+    parser.add_argument('--deterministic',
+                        default=parse_arguments.deterministic, dest='deterministic', action='store_true',
                         help='Whether to enable deterministic flags of PyTorch for deterministic results.')
-    parser.add_argument('--no_sort', default=False, dest='no_sort', action='store_true',
+    parser.add_argument('--no_sort',
+                        default=parse_arguments.no_sort, dest='no_sort', action='store_true',
                         help='Do not sort images by hashed image ID.')
-    parser.add_argument('--seed', default=None, type=int,
+    parser.add_argument('--seed',
+                        default=parse_arguments.seed, type=int,
                         help='The seed to pass into random.seed. Note: this is only really for the shuffle and does not (I think) affect cuda stuff.')
-    parser.add_argument('--mask_proto_debug', default=False, dest='mask_proto_debug', action='store_true',
+    parser.add_argument('--mask_proto_debug',
+                        default=parse_arguments.mask_proto_debug, dest='mask_proto_debug', action='store_true',
                         help='Outputs stuff for scripts/compute_mask.py.')
-    parser.add_argument('--no_crop', default=False, dest='crop', action='store_false',
+    parser.add_argument('--no_crop',
+                        default=parse_arguments.no_crop, dest='crop', action='store_false',
                         help='Do not crop output masks with the predicted bounding box.')
-    parser.add_argument('--image', default=None, type=str,
+    parser.add_argument('--image',
+                        default=parse_arguments.image, type=str,
                         help='A path to an image to use for display.')
-    parser.add_argument('--images', default=None, type=str, #'--images=/home/chris/workspace/yolact_edge/dataset/test:/home/chris/workspace/yolact_edge/output'
+    parser.add_argument('--images',
+                        default=parse_arguments.images, type=str, #'--images=/home/chris/workspace/yolact_edge/dataset/test:/home/chris/workspace/yolact_edge/output'
                         help='An input folder of images and output folder to save detected images. Should be in the format input->output.')
-    parser.add_argument('--video', default='/run/media/chris/Hinatazaka46/Download/project/Cities_Skylines_Line1_Trim.mp4:/run/media/chris/Hinatazaka46/Download/project/game_test.mp4', type=str, #'/home/chris/workspace/CCUEEProject/YOLOv5_test/wulai_short.mp4:/home/chris/workspace/CCUEEProject/YOLOv5_test/out_short.mp4'
+    parser.add_argument('--video',
+                        default=parse_arguments.video, type=str, #'/home/chris/workspace/CCUEEProject/YOLOv5_test/wulai_short.mp4:/home/chris/workspace/CCUEEProject/YOLOv5_test/out_short.mp4'
                         help='A path to a video to evaluate on. Passing in a number will use that index webcam.')
-    parser.add_argument('--video_multiframe', default=1, type=int,
+    parser.add_argument('--video_multiframe',
+                        default=parse_arguments.video_multiframe, type=int,
                         help='The number of frames to evaluate in parallel to make videos play at higher fps.')
-    parser.add_argument('--score_threshold', default=0.98, type=float,
+    parser.add_argument('--score_threshold',
+                        default=parse_arguments.score_threshold, type=float,
                         help='Detections with a score under this threshold will not be considered. This currently only works in display mode.')
-    parser.add_argument('--dataset', default=None, type=str,#'--dataset=my_custom_dataset'
+    parser.add_argument('--dataset',
+                        default=parse_arguments.dataset, type=str,#'--dataset=my_custom_dataset'
                         help='If specified, override the dataset specified in the config with this one (example: coco2017_dataset).')
-    parser.add_argument('--detect', default=False, dest='detect', action='store_true',
+    parser.add_argument('--detect',
+                        default=parse_arguments.detect, dest='detect', action='store_true',
                         help='Don\'t evauluate the mask branch at all and only do object detection. This only works for --display and --benchmark.')
     parser.add_argument('--yolact_transfer', dest='yolact_transfer', action='store_true',
                         help='Split pretrained FPN weights to two phase FPN (for models trained by YOLACT).')
     parser.add_argument('--coco_transfer', dest='coco_transfer', action='store_true',
                         help='[Deprecated] Split pretrained FPN weights to two phase FPN (for models trained by YOLACT).')
-    parser.add_argument('--drop_weights', default=None, type=str,
+    parser.add_argument('--drop_weights',
+                        default=parse_arguments.drop_weights, type=str,
                         help='Drop specified weights (split by comma) from existing model.')
-    parser.add_argument('--calib_images', default=None, type=str,
+    parser.add_argument('--calib_images',
+                        default=parse_arguments.calib_images, type=str,
                         help='Directory of images for TensorRT INT8 calibration, for explanation of this field, please refer to `calib_images` in `data/config.py`.')
-    parser.add_argument('--trt_batch_size', default=1, type=int,
+    parser.add_argument('--trt_batch_size',
+                        default=parse_arguments.trt_batch_size, type=int,
                         help='Maximum batch size to use during TRT conversion. This has to be greater than or equal to the batch size the model will take during inferece.')
-    parser.add_argument('--disable_tensorrt', default=True, dest='disable_tensorrt', action='store_true',
+    parser.add_argument('--disable_tensorrt',
+                        default=parse_arguments.disable_tensorrt, dest='disable_tensorrt', action='store_true',
                         help='Don\'t use TensorRT optimization when specified.')
-    parser.add_argument('--use_fp16_tensorrt', default=False, dest='use_fp16_tensorrt', action='store_true',
+    parser.add_argument('--use_fp16_tensorrt',
+                        default=parse_arguments.use_fp16_tensorrt, dest='use_fp16_tensorrt', action='store_true',
                         help='This replaces all TensorRT INT8 optimization with FP16 optimization when specified.')
-    parser.add_argument('--use_tensorrt_safe_mode', default=False, dest='use_tensorrt_safe_mode', action='store_true',
+    parser.add_argument('--use_tensorrt_safe_mode',
+                        default=parse_arguments.use_tensorrt_safe_mode, dest='use_tensorrt_safe_mode', action='store_true',
                         help='This enables the safe mode that is a workaround for various TensorRT engine issues.')
 
-    parser.set_defaults(no_bar=False, display=False, resume=False, output_coco_json=True, output_web_json=False, shuffle=False,
-                        benchmark=False, no_sort=False, no_hash=False, mask_proto_debug=False, crop=False, detect=False)
+    parser.set_defaults(no_bar = parse_arguments.no_bar, display = parse_arguments.display, resume = parse_arguments.resume,
+                        output_coco_json = parse_arguments.output_coco_json, output_web_json = parse_arguments.output_web_json,
+                        shuffle = parse_arguments.shuffle, benchmark = parse_arguments.benchmark, no_sort = parse_arguments.no_sort,
+                        no_hash = parse_arguments.no_hash, mask_proto_debug = parse_arguments.mask_proto_debug,
+                        crop = parse_arguments.crop, detect = parse_arguments.detect)
 
     global args
     args = parser.parse_args(argv)
@@ -1201,10 +1239,9 @@ def print_maps(all_maps):
     logger = logging.getLogger("yolact.eval")
     logger.info(output_str)
 
-
-
-if __name__ == '__main__':
-    parse_args()
+def my_yolact_edge(parse_arguments):
+#if __name__ == '__main__':
+    parse_args(parse_arguments)
 
     if args.config is not None:
         set_cfg(args.config)

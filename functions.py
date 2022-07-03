@@ -58,9 +58,9 @@ def get_segmentation(segs):
     masks = []
     for seg in segs:
         rail = np.zeros(seg.shape,np.uint8)
-        mask_R = seg[0,:,:] == 243
-        mask_G = seg[1,:,:] == 150
-        mask_B = seg[2,:,:] == 33
+        mask_R = seg[0,:,:] == 244
+        mask_G = seg[1,:,:] == 67
+        mask_B = seg[2,:,:] == 244
         mask = mask_R.astype(np.uint8) * mask_G.astype(np.uint8) * mask_B.astype(np.uint8)
         rail[:,:,:] = mask
         masks.append(rail*255)

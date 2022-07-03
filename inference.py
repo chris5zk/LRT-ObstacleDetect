@@ -9,80 +9,80 @@ from datasets import *
 from importpackage import *
 from hyperparameter import *
 from functions import *
-#from yolact_edge.inference import YOLACTEdgeInference 
-#from yolact_edge.eval import *
+from my_yolact.eval import *
 
+if __name__ == '__main__':
+    """
 ########## Load Original Data ##########
-# Images
-imgs = []
-segs = []
-if target == 'images':
+    # Images
+    imgs = []
+    segs = []
+    if target == 'images':
+        
+        print("-------------------------  Loading original images  -------------------------")
+        images_org_datasets = datasets.ImageFolder(test_org_path, transform=test_transforms)
+        images_org_dataloaders = torch.utils.data.DataLoader(images_org_datasets, batch_size=batch_size, shuffle=False)
+        for batch in tqdm(images_org_dataloaders):
+            img, label = batch
+            for i in range(len(img)):
+                imgs.append(img[i].numpy()*255)
+                
+        print("-------------------------  Loading segmentation images  -------------------------")
+        images_seg_datasets = datasets.ImageFolder(test_seg_path, transform=test_transforms)
+        images_seg_dataloaders = torch.utils.data.DataLoader(images_seg_datasets, batch_size=batch_size, shuffle=False)
+        for batch in tqdm(images_seg_dataloaders):
+            seg, label = batch
+            for i in range(len(seg)):
+                segs.append(seg[i].numpy()*255)
     
-    print("-------------------------  Loading original images  -------------------------")
-    images_org_datasets = datasets.ImageFolder(test_org_path, transform=test_transforms)
-    images_org_dataloaders = torch.utils.data.DataLoader(images_org_datasets, batch_size=batch_size, shuffle=False)
-    for batch in tqdm(images_org_dataloaders):
-        img, label = batch
-        for i in range(len(img)):
-            imgs.append(img[i].numpy()*255)
-            
-    print("-------------------------  Loading segmentation images  -------------------------")
-    images_seg_datasets = datasets.ImageFolder(test_seg_path, transform=test_transforms)
-    images_seg_dataloaders = torch.utils.data.DataLoader(images_seg_datasets, batch_size=batch_size, shuffle=False)
-    for batch in tqdm(images_seg_dataloaders):
-        seg, label = batch
-        for i in range(len(seg)):
-            segs.append(seg[i].numpy()*255)
-
-# Videos
-if target == 'vidoes':
-    pass
-
-########## yolact-edged ##########
-# yolact_edge_eval()
-
-
-
-
-
-
-
-########## yolov5 ##########
-## Load Model
-device = torch.device('cpu')
-print("-------------------------  Loading Model...  -------------------------")
-model = torch.hub.load('ultralytics/yolov5','custom', yolov5_pt, force_reload=True)
-model.to(device)
-
-print("------------------------- ↓ yolov5 ↓ -------------------------")
-print(model)
-print("------------------------- ↑ yolov5 ↑ -------------------------", flush=True)
-
-## Inference
-model.eval()
-print("-------------------------  Start Inference  -------------------------")  
-results = model(imgs)
-print("-------------------------  Finish Inference  -------------------------")
-
-## Results
-results.print()
-results.save()
-
-## Obstacle detect
-print("-------------------------  Obstacle Detecting...  -------------------------")
-# BBOX masks
-bbox_masks = get_bounding_box(imgs, results)
-# Rail masks
-seg_masks = get_segmentation(segs)
-# Interaction
-rail_masks, alerm_masks = obstacle_detect(bbox_masks, seg_masks)
-outputs = color_and_output(imgs, rail_masks, alerm_masks, results)
-
-## Output
-print("-------------------------  Saving Obstacle Detection Results  -------------------------")
-output_path = make_output_dir(output_base_path)
-store(outputs, output_path)
-print("-------------------------  Finish -------------------------")
-
-#if __name__ == '__main__':
-#    main()
+    # Videos
+    if target == 'vidoes':
+        pass
+    """   
+    ########## yolact-edged ##########
+    print("-------------------------  YOLACT_EDGE  -------------------------")
+    print("-------------------------  Start Inference  -------------------------")
+    my_yolact_edge(parse_arguments)
+    print("-------------------------  Finish Inference  -------------------------")
+    
+    """
+    ########## yolov5 ##########
+    ## Load Model
+    device = torch.device('cpu')
+    print("-------------------------  YOLOv5  -------------------------")
+    print("-------------------------  Loading Model...  -------------------------")
+    model = torch.hub.load('ultralytics/yolov5','custom', yolov5_pt, force_reload=True)
+    model.to(device)
+    
+    print("------------------------- ↓ yolov5 ↓ -------------------------")
+    print(model)
+    print("------------------------- ↑ yolov5 ↑ -------------------------", flush=True)
+    
+    ## Inference
+    model.eval()
+    print("-------------------------  Start Inference  -------------------------")  
+    results = model(imgs)
+    print("-------------------------  Finish Inference  -------------------------")
+    
+    ## Results
+    results.print()
+    results.save()
+    
+    ## Obstacle detect
+    print("-------------------------  Obstacle Detecting...  -------------------------")
+    # BBOX masks
+    bbox_masks = get_bounding_box(imgs, results)
+    # Rail masks
+    seg_masks = get_segmentation(segs)
+    # Interaction
+    rail_masks, alerm_masks = obstacle_detect(bbox_masks, seg_masks)
+    outputs = color_and_output(imgs, rail_masks, alerm_masks, results)
+    
+    ## Output
+    print("-------------------------  Saving Obstacle Detection Results  -------------------------")
+    output_path = make_output_dir(output_base_path)
+    store(outputs, output_path)
+    print("-------------------------  Finish -------------------------")
+    """
+    
+    #    main()
