@@ -9,7 +9,7 @@ from datasets import *
 from importpackage import *
 from hyperparameter import *
 from functions import *
-from my_yolact.eval import *
+#from my_yolact.eval import *
 
 if __name__ == '__main__':
 
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     ########## yolact-edged ##########
     print("-------------------------  YOLACT_EDGE  -------------------------")
     print("-------------------------  Start Inference  -------------------------")
-    my_yolact_edge(parse_arguments)
+    # my_yolact_edge(parse_arguments)
     print("-------------------------  Finish Inference  -------------------------")
     
 
