@@ -629,6 +629,7 @@ def evalimage(net:Yolact, path:str, save_path:str=None, detections:Detections=No
     
     # Rail ROI
     h, w, c = frame.shape
+    frame[0:int(h/3),:] = 0
     frame[:,0:int(w/3)] = 0
     frame[:,int(2*w/3):] = 0
     
