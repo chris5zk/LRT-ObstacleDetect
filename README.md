@@ -3,7 +3,6 @@
 ```               
 LRT-ObstacleDetect
 │ .git
-│ __pycache__
 │ README.md
 ├───dataset
 │	├───test
