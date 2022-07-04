@@ -9,9 +9,14 @@ from datasets import *
 from importpackage import *
 from hyperparameter import *
 from functions import *
-#from my_yolact.eval import *
+from my_yolact.eval import *
 
 if __name__ == '__main__':
+
+    ########## yolact-edged ##########
+    print("-------------------------  YOLACT_EDGE Start Inference  -------------------------")
+    my_yolact_edge(parse_arguments)
+    print("-------------------------  YOLACT_EDGE Finish Inference  -------------------------")    
 
 ########## Load Original Data ##########
     # Images
@@ -34,16 +39,12 @@ if __name__ == '__main__':
             seg, label = batch
             for i in range(len(seg)):
                 segs.append(seg[i].numpy()*255)
-    
+        
     # Videos
     if target == 'vidoes':
         pass
 
-    ########## yolact-edged ##########
-    print("-------------------------  YOLACT_EDGE  -------------------------")
-    print("-------------------------  Start Inference  -------------------------")
-    # my_yolact_edge(parse_arguments)
-    print("-------------------------  Finish Inference  -------------------------")
+   
     
 
     ########## yolov5 ##########
@@ -60,9 +61,9 @@ if __name__ == '__main__':
     
     ## Inference
     model.eval()
-    print("-------------------------  Start Inference  -------------------------")  
+    print("-------------------------  YOLOv5 Start Inference  -------------------------")  
     results = model(imgs)
-    print("-------------------------  Finish Inference  -------------------------")
+    print("-------------------------  YOLOv5 Finish Inference  -------------------------")
     
     ## Results
     results.print()
@@ -83,6 +84,3 @@ if __name__ == '__main__':
     output_path = make_output_dir(output_base_path)
     store(outputs, output_path)
     print("-------------------------  Finish -------------------------")
-
-    
-    #    main()

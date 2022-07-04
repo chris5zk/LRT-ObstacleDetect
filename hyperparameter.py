@@ -31,11 +31,11 @@ test_org_data = f"{test_seg_path}/rail"
 # parse_args
 class parse_arguments:
     # key arguments
-    trained_model = '/home/chris/workspace/yolact_edge/weights/yolact_edge_32_20000.pth'  # Trained state_dict file path to open. If "interrupt", this will open the interrupt file.
-    image = None                                                    # A path to an image to use for display.
-    images = '/home/chris/workspace/LRT-ObstacleDetect/dataset/test/images/original/rail/:/home/chris/workspace/LRT-ObstacleDetect/dataset/test/images/seg/rail/'                     # An input folder of images and output folder to save detected images. Should be in the format input:output.
-    video = None                                                    # A path to a video to evaluate on. Passing in a number will use that index webcam.
-    video_multiframe = 1                                            # The number of frames to evaluate in parallel to make videos play at higher fps.
+    trained_model = '/home/chris/workspace/yolact_edge/weights/yolact_edge_32_20000.pth'        # Trained state_dict file path to open. If "interrupt", this will open the interrupt file.
+    image = None                                                                                # A path to an image to use for display.
+    images = '/home/chris/workspace/LRT-ObstacleDetect/dataset/test/images/original/rail/:/home/chris/workspace/LRT-ObstacleDetect/dataset/test/images/seg/rail/'  if target=='images' else None                   # An input folder of images and output folder to save detected images. Should be in the format input:output.
+    video = '' if target=='videos' else None                                                    # A path to a video to evaluate on. Passing in a number will use that index webcam.
+    video_multiframe = 1                                                                        # The number of frames to evaluate in parallel to make videos play at higher fps.
     
     top_k = 1                       # Further restrict the number of predictions to parse.
     score_threshold = 0.1          # Detections with a score under this threshold will not be considered. This currently only works in display mode.
@@ -92,7 +92,7 @@ class parse_arguments:
 
 ### yolov5 ###
 # weights
-yolov5_pt = 'object_4.pt'
+yolov5_pt = 'object_5.pt'
 
 # data
 batch_size = 4
