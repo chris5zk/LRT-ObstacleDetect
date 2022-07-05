@@ -9,7 +9,7 @@ from importpackage import *
 
 ########## Datasets ##########
 dataset_base_path = './dataset'
-target = 'images'     # images/videos
+target = 'videos'     # images/videos
 
 ### train ###
 train_dataset_path = f"{dataset_base_path}/train"
@@ -20,25 +20,34 @@ test_path = f"{test_dataset_path}/{target}"
 
 # original dataset
 test_org_path = f"{test_path}/original"
-test_org_data = f"{test_org_path}/rail"
+test_org_images = f"{test_org_path}/rail"
+
+org_video = "wulai_short.mp4"
+test_org_video = f"{test_org_path}/{org_video}"
 
 # segmentation dataset
 test_seg_path = f"{test_path}/seg"          
-test_org_data = f"{test_seg_path}/rail"
+test_seg_images = f"{test_seg_path}/rail"
+
+seg_video = "out_short.mp4"
+test_seg_video = f"{test_seg_path}/{seg_video}"
 
 ########## Models ##########
 ### yolact-edge ###
+# weights
+yolact_edge_pt = './my_yolact/weights/yolact_edge_32_20000.pth'
+
 # parse_args
 class parse_arguments:
     # key arguments
-    trained_model = '/home/chris/workspace/yolact_edge/weights/yolact_edge_32_20000.pth'        # Trained state_dict file path to open. If "interrupt", this will open the interrupt file.
-    image = None                                                                                # A path to an image to use for display.
-    images = '/home/chris/workspace/LRT-ObstacleDetect/dataset/test/images/original/rail/:/home/chris/workspace/LRT-ObstacleDetect/dataset/test/images/seg/rail/'  if target=='images' else None                   # An input folder of images and output folder to save detected images. Should be in the format input:output.
-    video = '' if target=='videos' else None                                                    # A path to a video to evaluate on. Passing in a number will use that index webcam.
-    video_multiframe = 1                                                                        # The number of frames to evaluate in parallel to make videos play at higher fps.
+    trained_model = f'{os.path.abspath(yolact_edge_pt)}'                                                                # Trained state_dict file path to open. If "interrupt", this will open the interrupt file.
+    image = None                                                                                                        # A path to an image to use for display.
+    images = f'{os.path.abspath(test_org_images)}:{os.path.abspath(test_seg_images)}' if target=='images' else None         # An input folder of images and output folder to save detected images. Should be in the format input:output.
+    video = '' if target=='videos' else None                                                                            # A path to a video to evaluate on. Passing in a number will use that index webcam.
+    video_multiframe = 1                                                                                                # The number of frames to evaluate in parallel to make videos play at higher fps.
     
     top_k = 1                       # Further restrict the number of predictions to parse.
-    score_threshold = 0.1          # Detections with a score under this threshold will not be considered. This currently only works in display mode.
+    score_threshold = 0.1           # Detections with a score under this threshold will not be considered. This currently only works in display mode.
     
     cuda = True                     # Use cuda to evaulate model.
     config = None                   # The config object to use.

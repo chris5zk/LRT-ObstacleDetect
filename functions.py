@@ -106,7 +106,24 @@ def color_and_output(imgs, rail_masks, alerm_masks, results):
         outputs.append(output)
     return outputs
 
-def store(outputs,path):
-    for index,output in enumerate(tqdm(outputs)):
-        output = cv2.cvtColor(output,cv2.COLOR_BGR2RGB)
-        cv2.imwrite(f"{path}/inference_{index}.jpg",output)
+def store(outputs, path, target):
+    
+    if target == 'images':
+        for index,output in enumerate(tqdm(outputs)):
+            output = cv2.cvtColor(output,cv2.COLOR_BGR2RGB)
+            cv2.imwrite(f"{path}/inference_{index}.jpg",output)
+                
+    if target == 'videos':
+        frames = []
+        for index,output in enumerate(tqdm(outputs)):
+            #output = cv2.cvtColor(output,cv2.COLOR_BGR2RGB)
+            frames.append(output.transpose((1,2,0)))
+        frames = torch.tensor(np.array(frames))
+        torchvision.io.write_video(f'{path}/results.mp4', frames, 30)
+                
+                
+                
+                
+                
+                
+                

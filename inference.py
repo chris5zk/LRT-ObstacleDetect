@@ -9,21 +9,21 @@ from datasets import *
 from importpackage import *
 from hyperparameter import *
 from functions import *
-from my_yolact.eval import *
+#from my_yolact.eval import *
 
 if __name__ == '__main__':
-
+    
     ########## yolact-edged ##########
-    print("-------------------------  YOLACT_EDGE Start Inference  -------------------------")
-    my_yolact_edge(parse_arguments)
-    print("-------------------------  YOLACT_EDGE Finish Inference  -------------------------")    
+    # print("-------------------------  YOLACT_EDGE Start Inference  -------------------------")
+    # my_yolact_edge(parse_arguments)
+    # print("-------------------------  YOLACT_EDGE Finish Inference  -------------------------")    
 
-########## Load Original Data ##########
-    # Images
+    ########## Load Original Data ##########
     imgs = []
     segs = []
+    
+    # Images
     if target == 'images':
-        
         print("-------------------------  Loading original images  -------------------------")
         images_org_datasets = datasets.ImageFolder(test_org_path, transform=test_transforms)
         images_org_dataloaders = torch.utils.data.DataLoader(images_org_datasets, batch_size=batch_size, shuffle=False)
@@ -41,15 +41,20 @@ if __name__ == '__main__':
                 segs.append(seg[i].numpy()*255)
         
     # Videos
-    if target == 'vidoes':
-        pass
-
-   
+    if target == 'videos':
+        print("-------------------------  Loading original videos  -------------------------")
+        org_frame = torchvision.io.read_video(test_org_video, 0, 3, 'sec')
+        for img in tqdm(org_frame[0][0:89]):
+            imgs.append(img.numpy())
+        
+        print("-------------------------  Loading segmentation videos  -------------------------")
+        seg_frame = torchvision.io.read_video(test_seg_video, 0, 3, 'sec')
+        for seg in tqdm(seg_frame[0][0:89]):
+            segs.append(seg.numpy())
     
-
     ########## yolov5 ##########
     ## Load Model
-    device = torch.device('cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("-------------------------  YOLOv5  -------------------------")
     print("-------------------------  Loading Model...  -------------------------")
     model = torch.hub.load('ultralytics/yolov5','custom', yolov5_pt, force_reload=True)
@@ -67,7 +72,7 @@ if __name__ == '__main__':
     
     ## Results
     results.print()
-    results.save()
+    results.save() if target == 'images' else None
     
     ## Obstacle detect
     print("-------------------------  Obstacle Detecting...  -------------------------")
@@ -82,5 +87,5 @@ if __name__ == '__main__':
     ## Output
     print("-------------------------  Saving Obstacle Detection Results  -------------------------")
     output_path = make_output_dir(output_base_path)
-    store(outputs, output_path)
-    print("-------------------------  Finish -------------------------")
+    store(outputs, output_path, target)
+    print("\n-------------------------  Finish -------------------------")
