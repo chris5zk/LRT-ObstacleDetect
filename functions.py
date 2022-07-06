@@ -46,7 +46,7 @@ def get_bounding_box(imgs, results):
             xmax = int(p.iloc[i]['xmax'])
             ymin = int(p.iloc[i]['ymin'])
             ymax = int(p.iloc[i]['ymax'])
-            mask[max(0,int(ymin-0.25*(ymax-ymin))):ymax,max(0,int(xmin-0.25*(xmax-xmin))):max(int(xmax+0.25*(xmax-xmin)),imgs[0].shape[0]),:] = 255;
+            mask[max(0,int(ymin-0.25*(ymax-ymin))):ymax,max(0,int(xmin-0.25*(xmax-xmin))):min(int(xmax+0.25*(xmax-xmin)),imgs[0].shape[0]),:] = 255;
         masks.append(mask)
     return masks
 
