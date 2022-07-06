@@ -9,13 +9,13 @@ from datasets import *
 from importpackage import *
 from hyperparameter import *
 from functions import *
-from my_yolact.eval import *
+#from my_yolact.eval import *
 
 if __name__ == '__main__':
     
     ########## yolact-edged ##########
     print("-------------------------  YOLACT_EDGE Start Inference  -------------------------")
-    my_yolact_edge(parse_arguments)
+    #my_yolact_edge(parse_arguments)
     print("-------------------------  YOLACT_EDGE Finish Inference  -------------------------")    
 
     ########## Load Original Data ##########
@@ -48,12 +48,12 @@ if __name__ == '__main__':
         frame = torchvision.io.read_video(test_org_video, start, end, mode)
         for data in tqdm(frame[0]):
             imgs.append(data.numpy())
-        
+
         print("-------------------------  Loading segmentation videos  -------------------------")
         frame = torchvision.io.read_video(test_seg_video, start, end, mode)
         for data in tqdm(frame[0]):
             segs.append(data.numpy())
-    
+
     ########## yolov5 ##########
     ## Load Model
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
