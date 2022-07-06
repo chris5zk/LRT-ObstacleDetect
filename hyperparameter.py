@@ -9,10 +9,10 @@ from importpackage import *
 
 ########## Datasets ##########
 dataset_base_path = './dataset'
-target = 'videos'     # images/videos
+target = 'images'     # images / videos
 
 ### train ###
-train_dataset_path = f"{dataset_base_path}/train"
+# train_dataset_path = f"{dataset_base_path}/train"
 
 ### test ###
 test_dataset_path = f"{dataset_base_path}/test"
@@ -21,14 +21,12 @@ test_path = f"{test_dataset_path}/{target}"
 # original dataset
 test_org_path = f"{test_path}/original"
 test_org_images = f"{test_org_path}/rail"
-
 org_video = "wulai_short.mp4"
 test_org_video = f"{test_org_path}/{org_video}"
 
 # segmentation dataset
-test_seg_path = f"{test_path}/seg"          
+test_seg_path = f"{test_path}/seg"    
 test_seg_images = f"{test_seg_path}/rail"
-
 seg_video = "out_short.mp4"
 test_seg_video = f"{test_seg_path}/{seg_video}"
 
@@ -42,8 +40,8 @@ class parse_arguments:
     # key arguments
     trained_model = f'{os.path.abspath(yolact_edge_pt)}'                                                                # Trained state_dict file path to open. If "interrupt", this will open the interrupt file.
     image = None                                                                                                        # A path to an image to use for display.
-    images = f'{os.path.abspath(test_org_images)}:{os.path.abspath(test_seg_images)}' if target=='images' else None         # An input folder of images and output folder to save detected images. Should be in the format input:output.
-    video = '' if target=='videos' else None                                                                            # A path to a video to evaluate on. Passing in a number will use that index webcam.
+    images = f'{os.path.abspath(test_org_images)}:{os.path.abspath(test_seg_images)}' if target=='images' else None     # An input folder of images and output folder to save detected images. Should be in the format input:output.
+    video = f'{os.path.abspath(test_org_video)}:{os.path.abspath(test_seg_video)}' if target=='videos' else None        # A path to a video to evaluate on. Passing in a number will use that index webcam.
     video_multiframe = 1                                                                                                # The number of frames to evaluate in parallel to make videos play at higher fps.
     
     top_k = 1                       # Further restrict the number of predictions to parse.
@@ -105,6 +103,11 @@ yolov5_pt = 'object_5.pt'
 
 # data
 batch_size = 4
+
+# video
+mode = 'sec'    # pts / sec
+start = 0
+end = 3
 
 ########## Output ##########
 output_base_path = 'runs/output'

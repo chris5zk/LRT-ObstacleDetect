@@ -9,14 +9,14 @@ from datasets import *
 from importpackage import *
 from hyperparameter import *
 from functions import *
-#from my_yolact.eval import *
+from my_yolact.eval import *
 
 if __name__ == '__main__':
     
     ########## yolact-edged ##########
-    # print("-------------------------  YOLACT_EDGE Start Inference  -------------------------")
-    # my_yolact_edge(parse_arguments)
-    # print("-------------------------  YOLACT_EDGE Finish Inference  -------------------------")    
+    print("-------------------------  YOLACT_EDGE Start Inference  -------------------------")
+    my_yolact_edge(parse_arguments)
+    print("-------------------------  YOLACT_EDGE Finish Inference  -------------------------")    
 
     ########## Load Original Data ##########
     imgs = []
@@ -25,32 +25,34 @@ if __name__ == '__main__':
     # Images
     if target == 'images':
         print("-------------------------  Loading original images  -------------------------")
-        images_org_datasets = datasets.ImageFolder(test_org_path, transform=test_transforms)
-        images_org_dataloaders = torch.utils.data.DataLoader(images_org_datasets, batch_size=batch_size, shuffle=False)
-        for batch in tqdm(images_org_dataloaders):
-            img, label = batch
-            for i in range(len(img)):
-                imgs.append(img[i].numpy()*255)
+        dataset = datasets.ImageFolder(test_org_path, transform=test_transforms)
+        dataloaders = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False)
+        for batch in tqdm(dataloaders):
+            data, label = batch
+            for i in range(len(data)):
+                np = data[i].numpy()*255
+                imgs.append(np.astype('uint8').transpose((1,2,0)))
                 
         print("-------------------------  Loading segmentation images  -------------------------")
-        images_seg_datasets = datasets.ImageFolder(test_seg_path, transform=test_transforms)
-        images_seg_dataloaders = torch.utils.data.DataLoader(images_seg_datasets, batch_size=batch_size, shuffle=False)
-        for batch in tqdm(images_seg_dataloaders):
-            seg, label = batch
-            for i in range(len(seg)):
-                segs.append(seg[i].numpy()*255)
-        
+        dataset = datasets.ImageFolder(test_seg_path, transform=test_transforms)
+        dataloaders = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False)
+        for batch in tqdm(dataloaders):
+            data, label = batch
+            for i in range(len(data)):
+                np = data[i].numpy()*255
+                segs.append(np.astype('uint8').transpose((1,2,0)))
+
     # Videos
     if target == 'videos':
         print("-------------------------  Loading original videos  -------------------------")
-        org_frame = torchvision.io.read_video(test_org_video, 0, 3, 'sec')
-        for img in tqdm(org_frame[0][0:89]):
-            imgs.append(img.numpy())
+        frame = torchvision.io.read_video(test_org_video, start, end, mode)
+        for data in tqdm(frame[0]):
+            imgs.append(data.numpy())
         
         print("-------------------------  Loading segmentation videos  -------------------------")
-        seg_frame = torchvision.io.read_video(test_seg_video, 0, 3, 'sec')
-        for seg in tqdm(seg_frame[0][0:89]):
-            segs.append(seg.numpy())
+        frame = torchvision.io.read_video(test_seg_video, start, end, mode)
+        for data in tqdm(frame[0]):
+            segs.append(data.numpy())
     
     ########## yolov5 ##########
     ## Load Model
@@ -60,9 +62,9 @@ if __name__ == '__main__':
     model = torch.hub.load('ultralytics/yolov5','custom', yolov5_pt, force_reload=True)
     model.to(device)
     
-    print("------------------------- ↓ yolov5 ↓ -------------------------")
-    print(model)
-    print("------------------------- ↑ yolov5 ↑ -------------------------", flush=True)
+    #print("------------------------- ↓ yolov5 ↓ -------------------------")
+    #print(model)
+    #print("------------------------- ↑ yolov5 ↑ -------------------------", flush=True)
     
     ## Inference
     model.eval()
@@ -89,3 +91,4 @@ if __name__ == '__main__':
     output_path = make_output_dir(output_base_path)
     store(outputs, output_path, target)
     print("\n-------------------------  Finish -------------------------")
+    
