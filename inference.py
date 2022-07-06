@@ -31,7 +31,8 @@ if __name__ == '__main__':
             data, label = batch
             for i in range(len(data)):
                 np = data[i].numpy()*255
-                imgs.append(np.astype('uint8').transpose((1,2,0)))
+                np = np.astype('uint8').transpose((1,2,0))
+                imgs.append(np)
                 
         print("-------------------------  Loading segmentation images  -------------------------")
         dataset = datasets.ImageFolder(test_seg_path, transform=test_transforms)
@@ -40,7 +41,11 @@ if __name__ == '__main__':
             data, label = batch
             for i in range(len(data)):
                 np = data[i].numpy()*255
-                segs.append(np.astype('uint8').transpose((1,2,0)))
+                np = np.astype('uint8').transpose((1,2,0))
+                np[0:int(np.shape[0]/3),:] = 0
+                np[:,0:int(np.shape[1]/3)] = 0 
+                np[:,int(2*np.shape[1]/3):] = 0
+                segs.append(np)
 
     # Videos
     if target == 'videos':
