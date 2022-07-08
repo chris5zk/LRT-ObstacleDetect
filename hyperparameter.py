@@ -9,7 +9,7 @@ from importpackage import *
 
 ########## Datasets ##########
 dataset_base_path = './dataset'
-target = 'images'     # images / videos
+target = 'videos'     # images / videos
 
 ### train ###
 # train_dataset_path = f"{dataset_base_path}/train"
@@ -107,7 +107,7 @@ batch_size = 4
 # video
 mode = 'sec'    # pts / sec
 start = 0
-end = 3
+end = 10
 
 ########## Output ##########
 output_base_path = 'runs/output'

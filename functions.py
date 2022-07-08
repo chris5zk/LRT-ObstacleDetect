@@ -25,22 +25,25 @@ def make_output_dir(output_base_path):
         os.makedirs(output_base_path)
     except FileExistsError:
         print('{} exist'.format(output_base_path))
-
     # increment output dir
     save_dir = os.path.join(output_base_path, 'exp')
     save_dir = increment_path(save_dir, exist_ok=False)
-
     # directory in every output
     output_path = save_dir
-    os.makedirs(output_path)
-    
+    os.makedirs(output_path)    
     return output_path
+
+def rail_ROI(img):
+    img[0:int(img.shape[0]/3),:] = 0
+    img[:,0:int(img.shape[1]/3)] = 0 
+    img[:,int(2*img.shape[1]/3):] = 0
+    return img
 
 def get_bounding_box(imgs, results):
     masks = []
     pre = results.pandas().xyxy
     for index,p in enumerate(pre):
-        mask = np.zeros(imgs[index].shape,np.uint8)
+        mask = np.zeros(imgs[index].shape)
         for i in range(len(p)):
             xmin = int(p.iloc[i]['xmin'])
             xmax = int(p.iloc[i]['xmax'])
@@ -52,7 +55,7 @@ def get_bounding_box(imgs, results):
 
 def get_segmentation(segs):
     masks = []
-    for seg in segs:
+    for seg in segs: 
         rail = np.zeros(seg.shape,np.uint8)
         mask_R = seg[:,:,0] == 244
         mask_G = seg[:,:,1] == 67
@@ -101,24 +104,16 @@ def color_and_output(imgs, rail_masks, alerm_masks, results):
         outputs.append(output)
     return outputs
 
-def store(outputs, path, target):
-    
+def store(outputs, path, target, name):
+    index = 0
     if target == 'images':
-        for index,output in enumerate(tqdm(outputs)):
-            output = cv2.cvtColor(output,cv2.COLOR_BGR2RGB)
-            cv2.imwrite(f"{path}/inference_{index}.jpg",output)
-    
+        for batch in tqdm(outputs):
+            for output in batch:
+                output = cv2.cvtColor(output,cv2.COLOR_BGR2RGB)
+                cv2.imwrite(f"{path}/{os.listdir(name)[index]}",output)
+                index += 1
     if target == 'videos':
-        frames = []
-        for index,output in enumerate(tqdm(outputs)):
-            #output = cv2.cvtColor(output,cv2.COLOR_BGR2RGB)
-            frames.append(output)
-        frames = torch.tensor(np.array(frames))
-        torchvision.io.write_video(f'{path}/results.mp4', frames, 30)
-                
-                
-                
-                
-                
-                
-                
+        video = []
+        for frame in outputs:
+            video.append(frame[0])
+        torchvision.io.write_video(f'{path}/{os.listdir(name)[0]}', video, 30)
